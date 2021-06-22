@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>518361544221-jnafhaj7ql71807bjrn7fh7utrljh9cj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.518361544221-jnafhaj7ql71807bjrn7fh7utrljh9cj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>518361544221-s53bagl88s6s7m4lj47ujmg3o39hkovi.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDEny7u5i-t8RdYCxTnsXIojgdT0yeLQiA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>518361544221</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.babayaga.wodka</string>
+	<key>PROJECT_ID</key>
+	<string>wodka-c1567</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wodka-c1567.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:518361544221:ios:731c16c60322cc6803b8f4</string>
+</dict>
+</plist>

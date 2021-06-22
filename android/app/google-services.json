@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "518361544221",
+    "project_id": "wodka-c1567",
+    "storage_bucket": "wodka-c1567.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518361544221:android:b8c16d297c7b017903b8f4",
+        "android_client_info": {
+          "package_name": "com.babayaga.wodka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518361544221-s53bagl88s6s7m4lj47ujmg3o39hkovi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.babayaga.wodka",
+            "certificate_hash": "a8273a89162536935a6979acedf15e556f8d6631"
+          }
+        },
+        {
+          "client_id": "518361544221-besp3jl9tt8i5ur7s2ng2nsciklgson2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD26haZ_w7LtnOa0AhUk2AvqQjhoEhSOq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518361544221-besp3jl9tt8i5ur7s2ng2nsciklgson2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
