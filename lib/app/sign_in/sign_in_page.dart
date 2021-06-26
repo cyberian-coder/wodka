@@ -2,18 +2,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wodka/app/sign_in/email_sign_in_page.dart';
+import 'package:wodka/app/sign_in/sign_in_manager.dart';
 import 'package:wodka/app/sign_in/sign_in_button.dart';
 import 'package:wodka/app/sign_in/social_sign_in_button.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
 import 'package:wodka/services/auth.dart';
 
-class SignInPage extends StatefulWidget {
-  @override
-  _SignInPageState createState() => _SignInPageState();
-}
+class SignInPage extends StatelessWidget {
+  const SignInPage({Key key, @required this.manager, @required this.isLoading})
+      : super(key: key);
+  final SignInManager manager;
+  final bool isLoading;
 
-class _SignInPageState extends State<SignInPage> {
-  bool _isLoading = false;
+  static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      create: (_) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          child: Consumer<SignInManager>(
+            builder: (_, manager, __) => SignInPage(
+              manager: manager,
+              isLoading: isLoading.value,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseException &&
         exception.code == 'ERROR_ABORTED_BY_USER') {
@@ -28,51 +46,35 @@ class _SignInPageState extends State<SignInPage> {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInAnonymously();
+      await manager.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInWithGoogle();
+      await manager.signInWithGoogle();
     } on Exception catch (e) {
       _showSignInError(context, e);
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   void _signInWithEmail(BuildContext context) {
-    setState(() => _isLoading = true);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         //fullscreenDialog: true,
         builder: (context) => EmailSignInPage(),
       ),
     );
-    _isLoading = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'WODka',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        elevation: 2.0,
-      ),
+          title: Text('WODka', style: TextStyle(color: Colors.white)),
+          elevation: 2.0),
       body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
@@ -95,14 +97,14 @@ class _SignInPageState extends State<SignInPage> {
             text: 'Sign In with Google',
             textColor: Colors.black87,
             color: Colors.white,
-            onPressed: _isLoading ? null : () => _signInWithGoogle(context),
+            onPressed: isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 8.0),
           SignInButton(
             text: 'Sign In with email',
             textColor: Colors.white,
             color: Colors.teal[700],
-            onPressed: _isLoading ? null : () => _signInWithEmail(context),
+            onPressed: isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
           Text(
@@ -118,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
             text: 'Go anonymous',
             textColor: Colors.black,
             color: Colors.lime[300],
-            onPressed: _isLoading ? null : () => _signInAnonymously(context),
+            onPressed: isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
       ),
@@ -126,7 +128,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _buildHeader() {
-    if (_isLoading) {
+    if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
