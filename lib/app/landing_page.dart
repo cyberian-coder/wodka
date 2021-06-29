@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wodka/app/home_page.dart';
+import 'package:wodka/app/home/jobs/jobs_page.dart';
 import 'package:wodka/app/sign_in/sign_in_page.dart';
 import 'package:wodka/services/auth.dart';
+import 'package:wodka/services/database.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -17,7 +18,9 @@ class LandingPage extends StatelessWidget {
           if (user == null) {
             return SignInPage.create(context);
           }
-          return HomePage();
+          return Provider<Database>(
+              create: (_) => FirestoreDatabase(uid: user.uid),
+              child: JobsPage());
         }
         return Scaffold(
           body: Center(
