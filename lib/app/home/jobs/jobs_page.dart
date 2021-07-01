@@ -13,28 +13,6 @@ import 'package:wodka/services/database.dart';
 import 'edit_job_page.dart';
 
 class JobsPage extends StatelessWidget {
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> _confirmSignOut(BuildContext context) async {
-    final didRequestSignOut = await showAlertDialog(
-      context,
-      title: 'Logout',
-      content: 'Are you sure you want to log out?',
-      cancelActionText: "Cancel",
-      defaultActionText: 'Log out',
-    );
-    if (didRequestSignOut == true) {
-      _signOut(context);
-    }
-  }
-
   Future<void> _delete(BuildContext context, Job job) async {
     try {
       final database = Provider.of<Database>(context, listen: false);
@@ -56,26 +34,21 @@ class JobsPage extends StatelessWidget {
           'Jobs',
           style: TextStyle(color: Colors.white),
         ),
+        centerTitle: true,
         actions: [
-          FlatButton(
-            child: Text(
-              'Logout',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
             ),
-            onPressed: () => _confirmSignOut(context),
+            onPressed: () => EditJobPage.show(
+              context,
+              database: Provider.of<Database>(context, listen: false),
+            ),
           ),
         ],
       ),
       body: _buildContents(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-        ),
-        onPressed: () => EditJobPage.show(
-          context,
-          database: Provider.of<Database>(context, listen: false),
-        ),
-      ),
     );
   }
 

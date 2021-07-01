@@ -6,6 +6,8 @@ import 'package:wodka/app/sign_in/sign_in_page.dart';
 import 'package:wodka/services/auth.dart';
 import 'package:wodka/services/database.dart';
 
+import 'home/home_page.dart';
+
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class LandingPage extends StatelessWidget {
           }
           return Provider<Database>(
               create: (_) => FirestoreDatabase(uid: user.uid),
-              child: JobsPage());
+              child: HomePage());
         }
         return Scaffold(
           body: Center(
