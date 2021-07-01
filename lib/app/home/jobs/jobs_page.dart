@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wodka/app/home/job_entries/job_entries_page.dart';
 import 'package:wodka/app/home/jobs/job_list_tile.dart';
 import 'package:wodka/app/home/jobs/list_items_builder.dart';
 import 'package:wodka/app/home/models/job.dart';
@@ -52,7 +53,7 @@ class JobsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Jobs Page',
+          'Jobs',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -69,17 +70,17 @@ class JobsPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.add,
-          color: Colors.white,
         ),
         onPressed: () => EditJobPage.show(
           context,
+          database: Provider.of<Database>(context, listen: false),
         ),
       ),
     );
   }
 
   Widget _buildContents(BuildContext context) {
-    final database = Provider.of<Database>(context);
+    final database = Provider.of<Database>(context, listen: false);
     return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
@@ -101,7 +102,7 @@ class JobsPage extends StatelessWidget {
             },
             child: JobListTile(
               job: job,
-              onTap: () => EditJobPage.show(context, job: job),
+              onTap: () => JobEntriesPage.show(context, job),
             ),
           ),
         );
