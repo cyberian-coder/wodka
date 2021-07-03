@@ -29,6 +29,8 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    auth.currentUser;
     return Scaffold(
       appBar: AppBar(
         title: Text(
