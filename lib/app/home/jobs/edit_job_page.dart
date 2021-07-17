@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wodka/app/home/job_entries/format.dart';
 import 'package:wodka/app/home/models/job.dart';
 import 'package:wodka/common_widgets/show_alert_dialog.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
@@ -10,10 +12,10 @@ class EditJobPage extends StatefulWidget {
   const EditJobPage({Key key, @required this.database, this.job})
       : super(key: key);
   final Database database;
-  final Job job;
+  final Wod job;
 
   static Future<void> show(BuildContext context,
-      {Database database, Job job}) async {
+      {Database database, Wod job}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => EditJobPage(
@@ -36,6 +38,8 @@ class _EditJobPageState extends State<EditJobPage> {
   int _ratePerHour;
   String _wodDescription;
   String _myScore;
+  DateTime _selectedDate;
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -74,7 +78,7 @@ class _EditJobPageState extends State<EditJobPage> {
           );
         } else {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Job(
+          final job = Wod(
               id: id,
               name: _name,
               ratePerHour: _ratePerHour,
@@ -139,15 +143,23 @@ class _EditJobPageState extends State<EditJobPage> {
   }
 
   List<Widget> _buildChildren() {
+    _textEditingController.text = _name;
+
     return [
-      TextFormField(
-        decoration: InputDecoration(labelText: 'WOD date'),
-        initialValue: _name,
-        validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
-        onSaved: (value) => _name = value,
+      GestureDetector(
+        onTap: () => _selectDate(),
+        child: AbsorbPointer(
+          child: TextFormField(
+            controller: _textEditingController,
+            decoration: InputDecoration(hintText: 'WOD date'),
+            // validator: (value) =>
+            //     value.isNotEmpty ? null : 'Name can\'t be empty',
+            onSaved: (value) => _name = value,
+          ),
+        ),
       ),
       TextFormField(
-        enabled: false,
+        //enabled: false,
         minLines: 20,
         maxLines: 20,
         decoration: InputDecoration(labelText: 'WOD description'),
@@ -163,5 +175,61 @@ class _EditJobPageState extends State<EditJobPage> {
         onSaved: (value) => _myScore = value,
       ),
     ];
+  }
+
+  _selectDate() async {
+    DateTime pickedDate = await showModalBottomSheet<DateTime>(
+      context: context,
+      builder: (context) {
+        DateTime tempPickedDate;
+        return Container(
+          height: 250,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text('Done'),
+                      onPressed: () {
+                        Navigator.of(context).pop(tempPickedDate);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              Expanded(
+                child: Container(
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (DateTime dateTime) {
+                      tempPickedDate = dateTime;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _name = '${Format.dayOfWeek(pickedDate)}, ${Format.date(pickedDate)}';
+      });
+    }
   }
 }

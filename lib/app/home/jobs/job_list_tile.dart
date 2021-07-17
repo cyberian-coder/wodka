@@ -5,7 +5,7 @@ import 'package:wodka/app/home/models/job.dart';
 class JobListTile extends StatelessWidget {
   const JobListTile({Key key, @required this.job, this.onTap})
       : super(key: key);
-  final Job job;
+  final Wod job;
   final VoidCallback onTap;
 
   @override
@@ -15,19 +15,22 @@ class JobListTile extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Center(
-                child: Text('${Format.dayOfWeek(date)}, ${Format.date(date)}')),
+            title: Center(child: Text(job.name)),
           ),
-          Divider(),
           ListTile(
+              dense: true,
               title: Text(
-            job.wodDescription,
-            style: TextStyle(fontSize: 14),
-          )),
+                job.wodDescription,
+                style: TextStyle(fontSize: 14),
+              )),
           Divider(),
           ListTile(
-            //dense: true,
-            title: Text('My score: A) ${job.myScore}'),
+            dense: true,
+            leading: Text('My Score:'),
+            title: Text(
+              '${job.myScore}',
+              style: TextStyle(color: Colors.teal[800], fontSize: 16),
+            ),
             trailing: Icon(Icons.chevron_right),
             onTap: onTap,
           ),

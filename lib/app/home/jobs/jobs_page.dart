@@ -13,7 +13,7 @@ import 'package:wodka/services/database.dart';
 import 'edit_job_page.dart';
 
 class JobsPage extends StatelessWidget {
-  Future<void> _delete(BuildContext context, Job job) async {
+  Future<void> _delete(BuildContext context, Wod job) async {
     try {
       final database = Provider.of<Database>(context, listen: false);
       await database.deleteJob(job);
@@ -31,7 +31,7 @@ class JobsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Jobs',
+          'WODs',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -39,7 +39,6 @@ class JobsPage extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.add,
-              color: Colors.white,
             ),
             onPressed: () => EditJobPage.show(
               context,
@@ -54,10 +53,10 @@ class JobsPage extends StatelessWidget {
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-    return StreamBuilder<List<Job>>(
+    return StreamBuilder<List<Wod>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-        return ListItemBuilder<Job>(
+        return ListItemBuilder<Wod>(
           snapshot: snapshot,
           itemBuilder: (context, job) => Dismissible(
             key: Key('job-${job.id}'),

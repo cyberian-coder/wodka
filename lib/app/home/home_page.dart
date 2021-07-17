@@ -16,14 +16,14 @@ class _HomePageState extends State<HomePage> {
 
   final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
     TabItem.jobs: GlobalKey<NavigatorState>(),
-    TabItem.entries: GlobalKey<NavigatorState>(),
+    TabItem.pr: GlobalKey<NavigatorState>(),
     TabItem.account: GlobalKey<NavigatorState>(),
   };
 
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
       TabItem.jobs: (_) => JobsPage(),
-      TabItem.entries: (context) => EntriesPage.create(context),
+      TabItem.pr: (context) => EntriesPage.create(context),
       TabItem.account: (_) => AccountPage(),
     };
   }

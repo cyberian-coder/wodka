@@ -16,9 +16,9 @@ import 'package:wodka/services/database.dart';
 class JobEntriesPage extends StatelessWidget {
   const JobEntriesPage({@required this.database, @required this.job});
   final Database database;
-  final Job job;
+  final Wod job;
 
-  static Future<void> show(BuildContext context, Job job) async {
+  static Future<void> show(BuildContext context, Wod job) async {
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       CupertinoPageRoute(
@@ -42,7 +42,7 @@ class JobEntriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Job>(
+    return StreamBuilder<Wod>(
         stream: database.jobStream(jobId: job.id),
         builder: (context, snapshot) {
           final job = snapshot.data;
@@ -69,7 +69,7 @@ class JobEntriesPage extends StatelessWidget {
         });
   }
 
-  Widget _buildContent(BuildContext context, Job job) {
+  Widget _buildContent(BuildContext context, Wod job) {
     return StreamBuilder<List<Entry>>(
       stream: database.entriesStream(job: job),
       builder: (context, snapshot) {

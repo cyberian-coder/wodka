@@ -12,11 +12,11 @@ import 'package:wodka/services/database.dart';
 class EntryPage extends StatefulWidget {
   const EntryPage({@required this.database, @required this.job, this.entry});
   final Database database;
-  final Job job;
+  final Wod job;
   final Entry entry;
 
   static Future<void> show(
-      {BuildContext context, Database database, Job job, Entry entry}) async {
+      {BuildContext context, Database database, Wod job, Entry entry}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) =>

@@ -20,7 +20,7 @@ class EntriesBloc {
       );
 
   static List<EntryJob> _entriesJobsCombiner(
-      List<Entry> entries, List<Job> jobs) {
+      List<Entry> entries, List<Wod> jobs) {
     return entries.map((entry) {
       final job = jobs.firstWhere(
         (job) => job.id == entry.jobId,
