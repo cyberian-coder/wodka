@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wodka/app/home/job_entries/format.dart';
 import 'package:wodka/app/home/models/job.dart';
 
 class JobListTile extends StatelessWidget {
@@ -9,10 +10,24 @@ class JobListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(job.name),
-      trailing: Icon(Icons.chevron_right),
-      onTap: onTap,
+    final DateTime date = DateTime.now();
+    return Card(
+      child: Column(
+        children: [
+          ListTile(
+            title: Center(
+                child: Text('${Format.dayOfWeek(date)}, ${Format.date(date)}')),
+          ),
+          Divider(),
+          ListTile(title: Text(job.wodDescription)),
+          Divider(),
+          ListTile(
+            title: Text('My score: ${job.myScore}'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: onTap,
+          ),
+        ],
+      ),
     );
   }
 }

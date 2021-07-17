@@ -34,6 +34,8 @@ class _EditJobPageState extends State<EditJobPage> {
 
   String _name;
   int _ratePerHour;
+  String _wodDescription;
+  String _myScore;
 
   @override
   void initState() {
@@ -41,6 +43,8 @@ class _EditJobPageState extends State<EditJobPage> {
     if (widget.job != null) {
       _name = widget.job.name;
       _ratePerHour = widget.job.ratePerHour;
+      _wodDescription = widget.job.wodDescription;
+      _myScore = widget.job.myScore;
     }
   }
 
@@ -70,7 +74,12 @@ class _EditJobPageState extends State<EditJobPage> {
           );
         } else {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Job(id: id, name: _name, ratePerHour: _ratePerHour);
+          final job = Job(
+              id: id,
+              name: _name,
+              ratePerHour: _ratePerHour,
+              myScore: _myScore,
+              wodDescription: _wodDescription);
           await widget.database.setJob(job);
           Navigator.of(context).pop();
         }
@@ -131,18 +140,28 @@ class _EditJobPageState extends State<EditJobPage> {
 
   List<Widget> _buildChildren() {
     return [
+      Text(''),
       TextFormField(
-        decoration: InputDecoration(labelText: 'Job name'),
+        decoration: InputDecoration(labelText: 'WOD date'),
         initialValue: _name,
         validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
         onSaved: (value) => _name = value,
       ),
       TextFormField(
-        decoration: InputDecoration(labelText: 'Rate per hour'),
-        initialValue: _ratePerHour != null ? '$_ratePerHour' : null,
+        enabled: false,
+        minLines: 20,
+        maxLines: 20,
+        decoration: InputDecoration(labelText: 'WOD description'),
+        initialValue: _wodDescription,
+        validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _wodDescription = value,
+      ),
+      TextFormField(
+        decoration: InputDecoration(labelText: 'My Score:'),
+        initialValue: _myScore != null ? '$_myScore' : '',
         keyboardType:
             TextInputType.numberWithOptions(signed: false, decimal: false),
-        onSaved: (value) => _ratePerHour = int.tryParse(value) ?? 0,
+        onSaved: (value) => _myScore = value,
       ),
     ];
   }

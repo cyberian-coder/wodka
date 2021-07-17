@@ -65,19 +65,35 @@ class JobsPage extends StatelessWidget {
             direction: DismissDirection.endToStart,
             onDismissed: (direction) => _delete(context, job),
             confirmDismiss: (DismissDirection direction) async {
-              return await showAlertDialog(
-                context,
-                title: 'Confirm',
-                content: 'Are you sure you want to delete?',
-                defaultActionText: 'Delete',
-                cancelActionText: 'Cancel',
-              );
+              return await _confirmDismissDialog(context);
             },
             child: JobListTile(
               job: job,
-              onTap: () => JobEntriesPage.show(context, job),
+              onTap: () =>
+                  EditJobPage.show(context, database: database, job: job),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<bool> _confirmDismissDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm"),
+          content: const Text("Are you sure you wish to delete this item?"),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text("DELETE")),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text("CANCEL"),
+            ),
+          ],
         );
       },
     );
