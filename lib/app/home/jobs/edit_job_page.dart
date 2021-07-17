@@ -140,7 +140,6 @@ class _EditJobPageState extends State<EditJobPage> {
 
   List<Widget> _buildChildren() {
     return [
-      Text(''),
       TextFormField(
         decoration: InputDecoration(labelText: 'WOD date'),
         initialValue: _name,

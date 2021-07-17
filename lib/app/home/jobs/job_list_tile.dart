@@ -19,10 +19,15 @@ class JobListTile extends StatelessWidget {
                 child: Text('${Format.dayOfWeek(date)}, ${Format.date(date)}')),
           ),
           Divider(),
-          ListTile(title: Text(job.wodDescription)),
+          ListTile(
+              title: Text(
+            job.wodDescription,
+            style: TextStyle(fontSize: 14),
+          )),
           Divider(),
           ListTile(
-            title: Text('My score: ${job.myScore}'),
+            //dense: true,
+            title: Text('My score: A) ${job.myScore}'),
             trailing: Icon(Icons.chevron_right),
             onTap: onTap,
           ),
