@@ -2,25 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wodka/app/home/job_entries/format.dart';
+import 'package:wodka/app/home/jobs/format.dart';
 import 'package:wodka/app/home/models/job.dart';
 import 'package:wodka/common_widgets/show_alert_dialog.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
 import 'package:wodka/services/database.dart';
 
-class EditJobPage extends StatefulWidget {
-  const EditJobPage({Key key, @required this.database, this.job})
+class EditWodPage extends StatefulWidget {
+  const EditWodPage({Key key, @required this.database, this.wod})
       : super(key: key);
   final Database database;
-  final Wod job;
+  final Wod wod;
 
   static Future<void> show(BuildContext context,
-      {Database database, Wod job}) async {
+      {Database database, Wod wod}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) => EditJobPage(
+        builder: (context) => EditWodPage(
           database: database,
-          job: job,
+          wod: wod,
         ),
         fullscreenDialog: true,
       ),
@@ -28,10 +28,10 @@ class EditJobPage extends StatefulWidget {
   }
 
   @override
-  _EditJobPageState createState() => _EditJobPageState();
+  _EditWodPageState createState() => _EditWodPageState();
 }
 
-class _EditJobPageState extends State<EditJobPage> {
+class _EditWodPageState extends State<EditWodPage> {
   final _formKey = GlobalKey<FormState>();
 
   String _name;
@@ -44,11 +44,11 @@ class _EditJobPageState extends State<EditJobPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.job != null) {
-      _name = widget.job.name;
-      _ratePerHour = widget.job.ratePerHour;
-      _wodDescription = widget.job.wodDescription;
-      _myScore = widget.job.myScore;
+    if (widget.wod != null) {
+      _name = widget.wod.name;
+      _ratePerHour = widget.wod.ratePerHour;
+      _wodDescription = widget.wod.wodDescription;
+      _myScore = widget.wod.myScore;
     }
   }
 
@@ -64,10 +64,10 @@ class _EditJobPageState extends State<EditJobPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       try {
-        final jobs = await widget.database.jobsStream().first;
-        final allNames = jobs.map((job) => job.name).toList();
-        if (widget.job != null) {
-          allNames.remove(widget.job.name);
+        final wods = await widget.database.wodsStream().first;
+        final allNames = wods.map((wod) => wod.name).toList();
+        if (widget.wod != null) {
+          allNames.remove(widget.wod.name);
         }
         if (allNames.contains(_name)) {
           showAlertDialog(
@@ -77,14 +77,14 @@ class _EditJobPageState extends State<EditJobPage> {
             defaultActionText: 'OK',
           );
         } else {
-          final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Wod(
+          final id = widget.wod?.id ?? documentIdFromCurrentDate();
+          final wod = Wod(
               id: id,
               name: _name,
               ratePerHour: _ratePerHour,
               myScore: _myScore,
               wodDescription: _wodDescription);
-          await widget.database.setJob(job);
+          await widget.database.setWod(wod);
           Navigator.of(context).pop();
         }
       } on FirebaseException catch (e) {
@@ -102,7 +102,7 @@ class _EditJobPageState extends State<EditJobPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        title: Text(widget.job == null ? 'New Job' : 'Edit job'),
+        title: Text(widget.wod == null ? 'New Job' : 'Edit job'),
         actions: [
           FlatButton(
             child: Text(

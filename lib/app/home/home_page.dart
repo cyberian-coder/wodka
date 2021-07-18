@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wodka/app/home/cupertino_home_scaffold.dart';
 import 'package:wodka/app/home/entries/entries_page.dart';
+import 'package:wodka/app/home/jobs/personal_records.dart';
 import 'package:wodka/app/home/tab_item.dart';
 
 import 'account/account_page.dart';
-import 'jobs/jobs_page.dart';
+import 'jobs/wods_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,18 +13,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabItem _currentTab = TabItem.jobs;
+  TabItem _currentTab = TabItem.wods;
 
   final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    TabItem.jobs: GlobalKey<NavigatorState>(),
+    TabItem.wods: GlobalKey<NavigatorState>(),
     TabItem.pr: GlobalKey<NavigatorState>(),
     TabItem.account: GlobalKey<NavigatorState>(),
   };
 
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
-      TabItem.jobs: (_) => JobsPage(),
-      TabItem.pr: (context) => EntriesPage.create(context),
+      TabItem.wods: (_) => WodsPage(),
+      TabItem.pr: (_) => PersonalRecords(),
       TabItem.account: (_) => AccountPage(),
     };
   }

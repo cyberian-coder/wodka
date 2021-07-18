@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wodka/app/home/job_entries/format.dart';
+import 'package:wodka/app/home/jobs/format.dart';
 import 'package:wodka/common_widgets/input_dropdown.dart';
 
 class DateTimePicker extends StatelessWidget {

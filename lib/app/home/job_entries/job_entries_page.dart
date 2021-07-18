@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:wodka/app/home/job_entries/entry_list_item.dart';
 import 'package:wodka/app/home/job_entries/entry_page.dart';
-import 'package:wodka/app/home/jobs/edit_job_page.dart';
+import 'package:wodka/app/home/jobs/edit_wod_page.dart';
 import 'package:wodka/app/home/jobs/list_items_builder.dart';
 import 'package:wodka/app/home/models/entry.dart';
 import 'package:wodka/app/home/models/job.dart';
@@ -14,16 +14,16 @@ import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
 import 'package:wodka/services/database.dart';
 
 class JobEntriesPage extends StatelessWidget {
-  const JobEntriesPage({@required this.database, @required this.job});
+  const JobEntriesPage({@required this.database, @required this.wod});
   final Database database;
-  final Wod job;
+  final Wod wod;
 
-  static Future<void> show(BuildContext context, Wod job) async {
+  static Future<void> show(BuildContext context, Wod wod) async {
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       CupertinoPageRoute(
         fullscreenDialog: false,
-        builder: (context) => JobEntriesPage(database: database, job: job),
+        builder: (context) => JobEntriesPage(database: database, wod: wod),
       ),
     );
   }
@@ -43,35 +43,35 @@ class JobEntriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Wod>(
-        stream: database.jobStream(jobId: job.id),
+        stream: database.wodStream(wodId: wod.id),
         builder: (context, snapshot) {
-          final job = snapshot.data;
-          final jobName = job?.name ?? '';
+          final wod = snapshot.data;
+          final wodName = wod?.name ?? '';
           return Scaffold(
             appBar: AppBar(
               elevation: 2.0,
-              title: Text(jobName),
+              title: Text(wodName),
               centerTitle: true,
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit, color: Colors.white),
                   onPressed: () =>
-                      EditJobPage.show(context, database: database, job: job),
+                      EditWodPage.show(context, database: database, wod: wod),
                 ),
                 IconButton(
                     icon: Icon(Icons.add, color: Colors.white),
                     onPressed: () => EntryPage.show(
-                        context: context, database: database, job: job)),
+                        context: context, database: database, job: wod)),
               ],
             ),
-            body: _buildContent(context, job),
+            body: _buildContent(context, wod),
           );
         });
   }
 
   Widget _buildContent(BuildContext context, Wod job) {
     return StreamBuilder<List<Entry>>(
-      stream: database.entriesStream(job: job),
+      stream: database.entriesStream(wod: job),
       builder: (context, snapshot) {
         return ListItemBuilder<Entry>(
           snapshot: snapshot,

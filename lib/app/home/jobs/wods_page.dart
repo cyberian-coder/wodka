@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wodka/app/home/job_entries/job_entries_page.dart';
-import 'package:wodka/app/home/jobs/job_list_tile.dart';
+import 'package:wodka/app/home/jobs/wod_list_tile.dart';
 import 'package:wodka/app/home/jobs/list_items_builder.dart';
 import 'package:wodka/app/home/models/job.dart';
 import 'package:wodka/common_widgets/show_alert_dialog.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
 import 'package:wodka/services/auth.dart';
 import 'package:wodka/services/database.dart';
-import 'edit_job_page.dart';
+import 'edit_wod_page.dart';
 
-class JobsPage extends StatelessWidget {
-  Future<void> _delete(BuildContext context, Wod job) async {
+class WodsPage extends StatelessWidget {
+  Future<void> _delete(BuildContext context, Wod wod) async {
     try {
       final database = Provider.of<Database>(context, listen: false);
-      await database.deleteJob(job);
+      await database.deleteWod(wod);
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(
         context,
@@ -40,7 +40,7 @@ class JobsPage extends StatelessWidget {
             icon: Icon(
               Icons.add,
             ),
-            onPressed: () => EditJobPage.show(
+            onPressed: () => EditWodPage.show(
               context,
               database: Provider.of<Database>(context, listen: false),
             ),
@@ -54,22 +54,22 @@ class JobsPage extends StatelessWidget {
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
     return StreamBuilder<List<Wod>>(
-      stream: database.jobsStream(),
+      stream: database.wodsStream(),
       builder: (context, snapshot) {
         return ListItemBuilder<Wod>(
           snapshot: snapshot,
-          itemBuilder: (context, job) => Dismissible(
-            key: Key('job-${job.id}'),
+          itemBuilder: (context, wod) => Dismissible(
+            key: Key('wod-${wod.id}'),
             background: Container(color: Colors.red),
             direction: DismissDirection.endToStart,
-            onDismissed: (direction) => _delete(context, job),
+            onDismissed: (direction) => _delete(context, wod),
             confirmDismiss: (DismissDirection direction) async {
               return await _confirmDismissDialog(context);
             },
-            child: JobListTile(
-              job: job,
+            child: WodListTile(
+              wod: wod,
               onTap: () =>
-                  EditJobPage.show(context, database: database, job: job),
+                  EditWodPage.show(context, database: database, wod: wod),
             ),
           ),
         );

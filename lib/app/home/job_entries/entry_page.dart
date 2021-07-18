@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wodka/app/home/job_entries/date_time_picker.dart';
-import 'package:wodka/app/home/job_entries/format.dart';
+import 'package:wodka/app/home/jobs/format.dart';
 import 'package:wodka/app/home/models/entry.dart';
 import 'package:wodka/app/home/models/job.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
@@ -59,7 +59,7 @@ class _EntryPageState extends State<EntryPage> {
     final id = widget.entry?.id ?? documentIdFromCurrentDate();
     return Entry(
       id: id,
-      jobId: widget.job.id,
+      wodId: widget.job.id,
       start: start,
       end: end,
       comment: _comment,

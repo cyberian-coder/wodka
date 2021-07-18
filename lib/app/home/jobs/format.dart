@@ -9,11 +9,11 @@ class Format {
   }
 
   static String date(DateTime date) {
-    return DateFormat.yMMMd().format(date);
+    return DateFormat.yMMMMd().format(date);
   }
 
   static String dayOfWeek(DateTime date) {
-    return DateFormat.E().format(date);
+    return DateFormat.EEEE().format(date);
   }
 
   static String currency(double pay) {

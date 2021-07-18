@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wodka/app/home/job_entries/format.dart';
+import 'package:wodka/app/home/jobs/format.dart';
 import 'package:wodka/app/home/models/entry.dart';
 import 'package:wodka/app/home/models/job.dart';
 

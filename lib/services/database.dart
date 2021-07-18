@@ -5,14 +5,14 @@ import 'package:wodka/services/api_path.dart';
 import 'package:wodka/services/firestore_service.dart';
 
 abstract class Database {
-  Future<void> setJob(Wod job);
-  Future<void> deleteJob(Wod job);
-  Stream<Wod> jobStream({@required String jobId});
-  Stream<List<Wod>> jobsStream();
+  Future<void> setWod(Wod wod);
+  Future<void> deleteWod(Wod wod);
+  Stream<Wod> wodStream({@required String wodId});
+  Stream<List<Wod>> wodsStream();
 
   Future<void> setEntry(Entry entry);
   Future<void> deleteEntry(Entry entry);
-  Stream<List<Entry>> entriesStream({Wod job});
+  Stream<List<Entry>> entriesStream({Wod wod});
 }
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
@@ -24,33 +24,33 @@ class FirestoreDatabase implements Database {
   final _service = FirestoreService.instance;
 
   @override
-  Future<void> setJob(Wod job) => _service.setData(
-        path: APIPath.job(uid, job.id),
-        data: job.toMap(),
+  Future<void> setWod(Wod wod) => _service.setData(
+        path: APIPath.wod(uid, wod.id),
+        data: wod.toMap(),
       );
 
   @override
-  Future<void> deleteJob(Wod job) async {
+  Future<void> deleteWod(Wod wod) async {
     // delete where entry.jobId == job.jobId
-    final allEntries = await entriesStream(job: job).first;
+    final allEntries = await entriesStream(wod: wod).first;
     for (Entry entry in allEntries) {
-      if (entry.jobId == job.id) {
+      if (entry.wodId == wod.id) {
         await deleteEntry(entry);
       }
     }
     // delete job
-    await _service.deleteData(path: APIPath.job(uid, job.id));
+    await _service.deleteData(path: APIPath.wod(uid, wod.id));
   }
 
   @override
-  Stream<Wod> jobStream({@required String jobId}) => _service.documentStream(
-        path: APIPath.job(uid, jobId),
+  Stream<Wod> wodStream({@required String wodId}) => _service.documentStream(
+        path: APIPath.wod(uid, wodId),
         builder: (data, documentId) => Wod.fromMap(data, documentId),
       );
 
   @override
-  Stream<List<Wod>> jobsStream() => _service.collectionStream(
-        path: APIPath.jobs(uid),
+  Stream<List<Wod>> wodsStream() => _service.collectionStream(
+        path: APIPath.wods(uid),
         builder: (data, documentId) => Wod.fromMap(data, documentId),
       );
 
@@ -66,11 +66,11 @@ class FirestoreDatabase implements Database {
       );
 
   @override
-  Stream<List<Entry>> entriesStream({Wod job}) =>
+  Stream<List<Entry>> entriesStream({Wod wod}) =>
       _service.collectionStream<Entry>(
         path: APIPath.entries(uid),
-        queryBuilder: job != null
-            ? (query) => query.where('jobId', isEqualTo: job.id)
+        queryBuilder: wod != null
+            ? (query) => query.where('jobId', isEqualTo: wod.id)
             : null,
         builder: (data, documentID) => Entry.fromMap(data, documentID),
         sort: (lhs, rhs) => rhs.start.compareTo(lhs.start),

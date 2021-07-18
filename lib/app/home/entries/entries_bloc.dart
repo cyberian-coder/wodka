@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:wodka/app/home/entries/daily_jobs_details.dart';
 import 'package:wodka/app/home/entries/entries_list_tile.dart';
 import 'package:wodka/app/home/entries/entry_job.dart';
-import 'package:wodka/app/home/job_entries/format.dart';
+import 'package:wodka/app/home/jobs/format.dart';
 import 'package:wodka/app/home/models/entry.dart';
 import 'package:wodka/app/home/models/job.dart';
 import 'package:wodka/services/database.dart';
@@ -15,7 +15,7 @@ class EntriesBloc {
   /// combine List<Job>, List<Entry> into List<EntryJob>
   Stream<List<EntryJob>> get _allEntriesStream => Rx.combineLatest2(
         database.entriesStream(),
-        database.jobsStream(),
+        database.wodsStream(),
         _entriesJobsCombiner,
       );
 
@@ -23,7 +23,7 @@ class EntriesBloc {
       List<Entry> entries, List<Wod> jobs) {
     return entries.map((entry) {
       final job = jobs.firstWhere(
-        (job) => job.id == entry.jobId,
+        (job) => job.id == entry.wodId,
         orElse: () => null,
       );
       return EntryJob(entry, job);
