@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wodka/app/home/jobs/wods_page.dart';
+import 'package:wodka/app/home/wods/wods_page.dart';
 import 'package:wodka/app/sign_in/sign_in_page.dart';
 import 'package:wodka/services/auth.dart';
 import 'package:wodka/services/database.dart';

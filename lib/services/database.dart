@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:wodka/app/home/models/entry.dart';
-import 'package:wodka/app/home/models/job.dart';
+import 'package:wodka/app/home/models/wod.dart';
 import 'package:wodka/services/api_path.dart';
 import 'package:wodka/services/firestore_service.dart';
 
@@ -9,7 +9,6 @@ abstract class Database {
   Future<void> deleteWod(Wod wod);
   Stream<Wod> wodStream({@required String wodId});
   Stream<List<Wod>> wodsStream();
-
   Future<void> setEntry(Entry entry);
   Future<void> deleteEntry(Entry entry);
   Stream<List<Entry>> entriesStream({Wod wod});
@@ -70,7 +69,7 @@ class FirestoreDatabase implements Database {
       _service.collectionStream<Entry>(
         path: APIPath.entries(uid),
         queryBuilder: wod != null
-            ? (query) => query.where('jobId', isEqualTo: wod.id)
+            ? (query) => query.where('wodId', isEqualTo: wod.id)
             : null,
         builder: (data, documentID) => Entry.fromMap(data, documentID),
         sort: (lhs, rhs) => rhs.start.compareTo(lhs.start),

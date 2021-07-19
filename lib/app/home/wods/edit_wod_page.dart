@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wodka/app/home/jobs/format.dart';
-import 'package:wodka/app/home/models/job.dart';
+import 'package:wodka/app/home/models/wod.dart';
+import 'package:wodka/app/home/wods/format.dart';
 import 'package:wodka/common_widgets/show_alert_dialog.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
 import 'package:wodka/services/database.dart';
@@ -34,8 +33,7 @@ class EditWodPage extends StatefulWidget {
 class _EditWodPageState extends State<EditWodPage> {
   final _formKey = GlobalKey<FormState>();
 
-  String _name;
-  int _ratePerHour;
+  DateTime _name;
   String _wodDescription;
   String _myScore;
   DateTime _selectedDate;
@@ -45,8 +43,7 @@ class _EditWodPageState extends State<EditWodPage> {
   void initState() {
     super.initState();
     if (widget.wod != null) {
-      _name = widget.wod.name;
-      _ratePerHour = widget.wod.ratePerHour;
+      _name = widget.wod.wodDate;
       _wodDescription = widget.wod.wodDescription;
       _myScore = widget.wod.myScore;
     }
@@ -65,23 +62,23 @@ class _EditWodPageState extends State<EditWodPage> {
     if (_validateAndSaveForm()) {
       try {
         final wods = await widget.database.wodsStream().first;
-        final allNames = wods.map((wod) => wod.name).toList();
+        final allNames = wods.map((wod) => wod.wodDate).toList();
         if (widget.wod != null) {
-          allNames.remove(widget.wod.name);
+          allNames.remove(widget.wod.wodDate);
         }
         if (allNames.contains(_name)) {
           showAlertDialog(
             context,
-            title: 'Name already used',
-            content: 'Please choose a different job name',
+            title: 'This date was already assigned a wod',
+            content:
+                'Please choose a different date or delete the current wod for this date',
             defaultActionText: 'OK',
           );
         } else {
           final id = widget.wod?.id ?? documentIdFromCurrentDate();
           final wod = Wod(
               id: id,
-              name: _name,
-              ratePerHour: _ratePerHour,
+              wodDate: _name,
               myScore: _myScore,
               wodDescription: _wodDescription);
           await widget.database.setWod(wod);
@@ -143,7 +140,9 @@ class _EditWodPageState extends State<EditWodPage> {
   }
 
   List<Widget> _buildChildren() {
-    _textEditingController.text = _name;
+    _textEditingController.text = _name != null
+        ? '${Format.dayOfWeek(_name)}, ${Format.date(_name)}'
+        : '';
 
     return [
       GestureDetector(
@@ -152,9 +151,9 @@ class _EditWodPageState extends State<EditWodPage> {
           child: TextFormField(
             controller: _textEditingController,
             decoration: InputDecoration(hintText: 'WOD date'),
-            // validator: (value) =>
-            //     value.isNotEmpty ? null : 'Name can\'t be empty',
-            onSaved: (value) => _name = value,
+            validator: (value) =>
+                value.isNotEmpty ? null : 'Name can\'t be empty',
+            onSaved: (value) => _name,
           ),
         ),
       ),
@@ -164,7 +163,8 @@ class _EditWodPageState extends State<EditWodPage> {
         maxLines: 20,
         decoration: InputDecoration(labelText: 'WOD description'),
         initialValue: _wodDescription,
-        validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
+        validator: (value) =>
+            value.isNotEmpty ? null : 'Wod description can\'t be empty',
         onSaved: (value) => _wodDescription = value,
       ),
       TextFormField(
@@ -177,7 +177,7 @@ class _EditWodPageState extends State<EditWodPage> {
     ];
   }
 
-  _selectDate() async {
+  void _selectDate() async {
     DateTime pickedDate = await showModalBottomSheet<DateTime>(
       context: context,
       builder: (context) {
@@ -199,7 +199,8 @@ class _EditWodPageState extends State<EditWodPage> {
                     CupertinoButton(
                       child: Text('Done'),
                       onPressed: () {
-                        Navigator.of(context).pop(tempPickedDate);
+                        Navigator.of(context)
+                            .pop(tempPickedDate ?? DateTime.now());
                       },
                     ),
                   ],
@@ -213,6 +214,9 @@ class _EditWodPageState extends State<EditWodPage> {
                 child: Container(
                   child: CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.date,
+                    minimumYear: DateTime.now().year - 1,
+                    maximumYear: DateTime.now().year + 1,
+                    initialDateTime: _name ?? DateTime.now(),
                     onDateTimeChanged: (DateTime dateTime) {
                       tempPickedDate = dateTime;
                     },
@@ -225,10 +229,11 @@ class _EditWodPageState extends State<EditWodPage> {
       },
     );
 
-    if (pickedDate != null && pickedDate != _selectedDate) {
+    if (pickedDate != null && pickedDate != _name) {
       setState(() {
-        _selectedDate = pickedDate;
-        _name = '${Format.dayOfWeek(pickedDate)}, ${Format.date(pickedDate)}';
+        _name = pickedDate;
+        _textEditingController.text =
+            '${Format.dayOfWeek(pickedDate)}, ${Format.date(pickedDate)}';
       });
     }
   }

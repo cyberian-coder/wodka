@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wodka/app/home/jobs/empty_content.dart';
+import 'package:wodka/app/home/wods/empty_content.dart';
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 

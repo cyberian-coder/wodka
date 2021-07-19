@@ -2,15 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wodka/app/home/job_entries/job_entries_page.dart';
-import 'package:wodka/app/home/jobs/wod_list_tile.dart';
-import 'package:wodka/app/home/jobs/list_items_builder.dart';
-import 'package:wodka/app/home/models/job.dart';
-import 'package:wodka/common_widgets/show_alert_dialog.dart';
+import 'package:wodka/app/home/models/wod.dart';
+import 'package:wodka/app/home/wods/edit_wod_page.dart';
+import 'package:wodka/app/home/wods/list_items_builder.dart';
+import 'package:wodka/app/home/wods/wod_list_tile.dart';
 import 'package:wodka/common_widgets/show_exception_alert_dialog.dart';
-import 'package:wodka/services/auth.dart';
 import 'package:wodka/services/database.dart';
-import 'edit_wod_page.dart';
 
 class WodsPage extends StatelessWidget {
   Future<void> _delete(BuildContext context, Wod wod) async {

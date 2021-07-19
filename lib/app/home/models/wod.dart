@@ -1,31 +1,28 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class Wod {
   Wod({
     @required this.id,
-    this.name,
-    this.ratePerHour,
+    this.wodDate,
     this.wodDescription,
     this.myScore,
   });
   final String id;
-  final String name;
+  final DateTime wodDate;
   final String wodDescription;
   final String myScore;
-  final int ratePerHour;
 
   factory Wod.fromMap(Map<String, dynamic> data, String documentId) {
     if (data == null) {
       return null;
     }
-    final String name = data['name'];
-    final int ratePerHour = data['ratePerHour'];
+    final DateTime wodDate = data['wodDate'].toDate();
     final String wodDescription = data['wodDescription'];
     final String myScore = data['myScore'];
     return Wod(
       id: documentId,
-      name: name,
-      ratePerHour: ratePerHour,
+      wodDate: wodDate,
       wodDescription: wodDescription,
       myScore: myScore,
     );
@@ -33,8 +30,7 @@ class Wod {
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'ratePerHour': ratePerHour,
+      'wodDate': wodDate,
       'wodDescription': wodDescription,
       'myScore': myScore,
     };

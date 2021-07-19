@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wodka/app/home/models/job.dart';
+import 'package:wodka/app/home/models/wod.dart';
+import 'package:wodka/app/home/wods/format.dart';
 
 class WodListTile extends StatelessWidget {
   const WodListTile({Key key, @required this.wod, this.onTap})
@@ -13,8 +14,10 @@ class WodListTile extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Center(child: Text(wod.name)),
-          ),
+              title: Center(
+            child: Text(
+                '${Format.dayOfWeek(wod.wodDate)}, ${Format.date(wod.wodDate)}'),
+          )),
           ListTile(
               dense: true,
               title: Text(

@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wodka/app/home/jobs/wods_page.dart';
+import 'package:wodka/app/home/wods/wods_page.dart';
 import 'package:wodka/app/home/tab_item.dart';
-
-import 'job_entries/entry_page.dart';
 
 class CupertinoHomeScaffold extends StatelessWidget {
   const CupertinoHomeScaffold({
@@ -24,7 +22,7 @@ class CupertinoHomeScaffold extends StatelessWidget {
       tabBar: CupertinoTabBar(
         items: [
           _buildItem(TabItem.wods),
-          _buildItem(TabItem.pr),
+          _buildItem(TabItem.myStats),
           _buildItem(TabItem.account),
         ],
         onTap: (index) => onSelectTab(TabItem.values[index]),
